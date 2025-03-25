@@ -1,4 +1,8 @@
+const fs = require('fs');
+const path = require('path');
 const hre = require("hardhat");
+require('dotenv').config();
+
 
 async function main() {
     // Get the deployer account with which we will deploy the contract
@@ -21,6 +25,30 @@ async function main() {
     // Get the contract address
     const contractAddress = await identity.getAddress();
     console.log("Identity contract deployed to the address:", contractAddress);
+
+    // Update root .env
+    const rootEnvPath = path.join(__dirname, '../.env');
+    let rootEnvContent = fs.readFileSync(rootEnvPath, 'utf8');
+    const rootContractAddressRegex = /^CONTRACT_ADDRESS=".*"$/m;
+
+    if (rootContractAddressRegex.test(rootEnvContent)) {
+        rootEnvContent = rootEnvContent.replace(rootContractAddressRegex, `CONTRACT_ADDRESS="${contractAddress}"`);
+    } else {
+        rootEnvContent += `\nCONTRACT_ADDRESS="${contractAddress}"\n`;
+    }
+
+    // Update root .env
+    fs.writeFileSync(rootEnvPath, rootEnvContent);
+    // console.log('Updated CONTRACT_ADDRESS in root .env');
+
+    // Update frontend .env
+    const frontendEnvPath = path.join(__dirname, '../frontend/.env');
+    const viteContractAddress = `VITE_CONTRACT_ADDRESS="${contractAddress}"\n`;
+
+    if (fs.existsSync(frontendEnvPath)) {
+        fs.writeFileSync(frontendEnvPath, viteContractAddress);
+        console.log('Successfully updated root and frontend .env file.');
+    }
 
     const balanceAfter = await deployer.provider.getBalance(deployer.address);
     console.log("Account balance after deployment:", balanceAfter.toString());
