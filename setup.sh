@@ -48,6 +48,13 @@ echo "Contracts deployed."
 # --- 6. Deploy API with Gunicorn ---
 echo "Deploying API with Gunicorn..."
 cd api
-
 # run api through gunicorn
 venv/bin/gunicorn --bind 0.0.0.0:8000 app:app
+echo "API deployed."
+
+# --- 7. Deploy Frontend ---
+cd ..
+echo "Deploying frontend..."
+cd frontend_basic
+npm run build && npm run serve
+echo "Frontend deployed."
