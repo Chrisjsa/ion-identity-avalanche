@@ -1,10 +1,12 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from dotenv import load_dotenv
 from web3 import Web3
 import json
 import os
 
 app = Flask(__name__)
+CORS(app)
 load_dotenv()  # Load environment variables from .env
 
 # Load contract ABI and address from environment variables or config file
@@ -87,7 +89,7 @@ def is_valid(address):
     try:
         account = get_account_and_sign(private_key=address)
         valid = contract.functions.isValid(account.address).call()
-        return jsonify({'message': f'Identity is valid: {valid}'}), 200
+        return jsonify({'message': 'Identity is valid' if valid else 'Identity is not valid'}), 200
     except Exception as ex1:
         return jsonify({'error': str(ex1)}), 500
 

@@ -1,3 +1,4 @@
+Flask-Cors
 Flask
 web3
 python-dotenv
