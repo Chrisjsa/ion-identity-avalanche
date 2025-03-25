@@ -41,13 +41,23 @@ async function main() {
     fs.writeFileSync(rootEnvPath, rootEnvContent);
     // console.log('Updated CONTRACT_ADDRESS in root .env');
 
+    // Update api/.env
+    const DEPLOYER_URL_RPC = process.env.DEPLOYER_URL_RPC;
+    const apiEnvPath = path.join(__dirname, '../api/.env');
+    const apiEnvContent = `CONTRACT_ADDRESS="${contractAddress}"\nINFURA_URL="${DEPLOYER_URL_RPC}"\n`;
+
+    if (fs.existsSync(apiEnvPath)) {
+        fs.writeFileSync(apiEnvPath, apiEnvContent);
+        console.log('Successfully updated api .env file.');
+    }
+
     // Update frontend .env
     const frontendEnvPath = path.join(__dirname, '../frontend/.env');
     const viteContractAddress = `VITE_CONTRACT_ADDRESS="${contractAddress}"\n`;
 
     if (fs.existsSync(frontendEnvPath)) {
         fs.writeFileSync(frontendEnvPath, viteContractAddress);
-        console.log('Successfully updated root and frontend .env file.');
+        console.log('Successfully updated frontend .env file.');
     }
 
     const balanceAfter = await deployer.provider.getBalance(deployer.address);

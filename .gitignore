@@ -156,3 +156,7 @@ ignition/deployments/chain-31337
 
 # Frontend files
 frontend/src/abis/*.json
+
+# Backend files
+api/venv
+api/IdentityABI.json
