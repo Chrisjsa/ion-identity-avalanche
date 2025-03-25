@@ -11,7 +11,7 @@ module.exports = {
   networks: {
     ion: {
       url: DEPLOYER_URL_RPC,
-      chainId: DEPLOYER_CHAIN_ID,
+      chainId: parseInt(DEPLOYER_CHAIN_ID),
       gasPrice: 25000000000,
       accounts: [DEPLOYER_PRIVATE_KEY]
     }
