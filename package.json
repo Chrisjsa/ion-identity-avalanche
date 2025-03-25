@@ -2,7 +2,8 @@
   "scripts": {
     "compile": "npx hardhat compile",
     "copy-abi": "node scripts/copyABI.js",
-    "deploy": "hardhat run scripts/deploy.js --network ion && npm run copy-abi"
+    "fund": "hardhat run scripts/fundWallets.js --network ion",
+    "deploy": "hardhat run scripts/deploy.js --network ion && npm run fund && npm run copy-abi"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
