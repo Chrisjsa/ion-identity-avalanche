@@ -27,19 +27,26 @@ async function main() {
     console.log("Identity contract deployed to the address:", contractAddress);
 
     // Update root .env
-    const rootEnvPath = path.join(__dirname, '../.env');
-    let rootEnvContent = fs.readFileSync(rootEnvPath, 'utf8');
-    const rootContractAddressRegex = /^CONTRACT_ADDRESS=".*"$/m;
+    try {
+        let rootEnvContent = fs.readFileSync(rootEnvPath, 'utf8');
+        const rootContractAddressRegex = /^CONTRACT_ADDRESS=".*"$/m;
 
-    if (rootContractAddressRegex.test(rootEnvContent)) {
-        rootEnvContent = rootEnvContent.replace(rootContractAddressRegex, `CONTRACT_ADDRESS="${contractAddress}"`);
-    } else {
-        rootEnvContent += `\nCONTRACT_ADDRESS="${contractAddress}"\n`;
+        if (rootContractAddressRegex.test(rootEnvContent)) {
+            rootEnvContent = rootEnvContent.replace(rootContractAddressRegex, `CONTRACT_ADDRESS="${contractAddress}"`);
+        } else {
+            rootEnvContent += `\nCONTRACT_ADDRESS="${contractAddress}"\n`;
+        }
+
+        fs.writeFileSync(rootEnvPath, rootEnvContent);
+        console.log('Updated CONTRACT_ADDRESS in root .env');
+
+    } catch (error) {
+        console.warn('Error updating root .env file:', error.message);
+        console.warn('Using environment variables instead.');
+        // If .env file doesn't exist, or is inaccessible, use env variables directly
+        process.env.CONTRACT_ADDRESS = contractAddress;
+        console.log('CONTRACT_ADDRESS set in environment variables.');
     }
-
-    // Update root .env
-    fs.writeFileSync(rootEnvPath, rootEnvContent);
-    // console.log('Updated CONTRACT_ADDRESS in root .env');
 
     // Update api/.env
     const DEPLOYER_URL_RPC = process.env.DEPLOYER_URL_RPC;
