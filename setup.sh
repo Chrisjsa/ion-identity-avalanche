@@ -39,5 +39,7 @@ echo "API deployed."
 echo "Deploying frontend..."
 cd frontend_basic
 npm install
-npm run build && npm run serve
+npm run build
+npm install -g serve
+serve -s build
 echo "Frontend deployed."
