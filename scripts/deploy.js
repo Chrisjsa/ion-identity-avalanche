@@ -49,6 +49,8 @@ async function main() {
     if (fs.existsSync(apiEnvPath)) {
         fs.writeFileSync(apiEnvPath, apiEnvContent);
         console.log('Successfully updated api .env file.');
+    } else {
+        console.log('api .env file not found.');
     }
 
     // Update frontend .env
@@ -58,6 +60,8 @@ async function main() {
     if (fs.existsSync(frontendEnvPath)) {
         fs.writeFileSync(frontendEnvPath, viteContractAddress);
         console.log('Successfully updated frontend .env file.');
+    } else {
+        console.log('frontend .env file not found.');
     }
 
     const balanceAfter = await deployer.provider.getBalance(deployer.address);
